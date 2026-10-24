@@ -1,1 +1,595 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>ElectroX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef1f4;--card:#fff;--fg:#0d1b2a;--mut:#5a6878;--line:#d3dae2;--ac:#0b5d7a;--ac2:#b9801a;--stage:#0b1626;--elt:#0d1b2a;--onac:#fff;
+--alk:#f0a77c;--ale:#ecd078;--tra:#8dbbe3;--pos:#a3cfa9;--met:#bfaee0;--non:#79d0c2;--hal:#ef9bb0;--nob:#c7a6e6;--lan:#e0bc7e;--act:#e39b9b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a121c;--card:#111c2a;--fg:#e8eef4;--mut:#93a3b4;--line:#223244;--ac:#4fb3d9;--ac2:#e0a93a;--stage:#060c14;--elt:#fff;--onac:#06202b;
+--alk:#a8623f;--ale:#8f7620;--tra:#3f6e94;--pos:#4c7c52;--met:#6f5a93;--non:#2f8479;--hal:#a04a63;--nob:#7d54a0;--lan:#8a6a35;--act:#8a4747}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,system-ui,sans-serif}
+header{max-width:1100px;margin:auto;padding:16px 16px 4px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:44px;height:44px;flex:none}
+h1{margin:0;font-size:clamp(24px,5vw,34px);font-weight:700;line-height:1.15}
+.en{font-size:14px;color:var(--mut);letter-spacing:.14em;direction:ltr;text-align:start}
+#tabs{display:flex;gap:6px;overflow-x:auto;padding:14px 0 8px;border-bottom:1px solid var(--line)}
+input,select,.tab{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);min-width:0}
+.tab{cursor:pointer;white-space:nowrap}
+#tabs .tab{border-color:transparent;background:transparent;color:var(--mut)}
+#tabs .tab[aria-pressed=true]{background:var(--ac);color:var(--onac);font-weight:600}
+.bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 0 0}
+input{flex:1 1 160px;max-width:320px}
+#detail{max-width:1100px;margin:12px auto;padding:0 16px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+#stage{position:relative;background:radial-gradient(circle at 50% 45%,#16304f,var(--stage) 72%);min-height:300px}
+#cv{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#stage small{position:absolute;bottom:6px;inset-inline:0;text-align:center;color:#9fb3c8;font-size:12px;pointer-events:none}
+.info{padding:18px}.info h2{margin:0;font-size:26px}
+.info h3{margin:0;font-weight:400;color:var(--mut);font-size:15px;direction:ltr;text-align:start}
+dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:15px}
+dt{color:var(--mut)}dd{margin:0;word-break:break-word}
+.chip{display:inline-block;padding:1px 12px;border-radius:99px;color:#0d1b2a;font-size:13px}
+@media(max-width:700px){.dcard{grid-template-columns:1fr}#stage{min-height:280px}}
+.wrap{max-width:1100px;margin:auto;padding:8px 16px 32px;overflow-x:auto}
+#grid{direction:ltr;display:grid;grid-template-columns:repeat(18,minmax(48px,1fr));gap:3px;min-width:900px}
+.el{aspect-ratio:1;border:0;border-radius:4px;padding:2px;color:var(--elt);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.el i{font-style:normal;font-size:9px;align-self:flex-start;margin-left:3px}
+.el b{font-size:16px}.el small{font-size:9px;white-space:nowrap}
+.el:focus-visible,.mol:focus-visible{outline:3px solid var(--ac);outline-offset:1px}
+.el.dim{opacity:.18}.el.sel{outline:3px solid var(--fg);outline-offset:1px}
+#mols{display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mol{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;color:var(--fg);font:inherit;cursor:pointer;text-align:center}
+.mol b{display:block;font-size:22px;direction:ltr}.mol.sel{outline:2px solid var(--ac)}
+.pnl,#lab{display:none;max-width:1100px;margin:auto}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px}
+.box h3{margin:0 0 8px;font-size:18px}.hint{margin:0 0 10px;color:var(--mut);font-size:14px}
+.box label{display:block;margin:8px 0 2px;font-size:14px;color:var(--mut)}
+.box input,.box select{width:100%;box-sizing:border-box;max-width:none;direction:ltr;text-align:start}
+.box input[type=range]{padding:0}
+.res{margin-top:12px;line-height:1.9}.res b{font-size:20px}
+.big{font-size:40px;font-weight:700;color:var(--ac)}.big small{font-size:16px;color:var(--mut)}
+.eqn{direction:ltr;font-size:24px;font-weight:600;padding:6px 0;text-align:start}
+table{border-collapse:collapse;width:100%;margin-top:8px;direction:ltr}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:start}
+.box ul{margin:0;padding-inline-start:20px;line-height:2}
+canvas#tcv{width:100%;height:240px;display:block}
+.phv{font-size:56px;font-weight:700;line-height:1;color:var(--ac)}
+.scale{position:relative;height:20px;border-radius:10px;margin:16px 0 4px;direction:ltr;background:linear-gradient(90deg,#d7261e,#f26a21,#f6c026,#9bd03a,#2fb35a,#1aa6a6,#2a6fdb,#6a3fc2)}
+.scale i{position:absolute;top:-6px;left:50%;width:5px;height:32px;background:var(--fg);border-radius:3px;transform:translateX(-50%);transition:left .6s}
+.ticks{display:flex;justify-content:space-between;direction:ltr;font-size:12px;color:var(--mut)}
+#phtube{display:flex;align-items:center;gap:14px}
+#beaker,#tfl{width:64px;height:76px;border:3px solid var(--fg);border-top:none;border-radius:0 0 14px 14px;flex:none;transition:background .5s}
+@media(max-width:700px){.g2{grid-template-columns:1fr}}
 
+/* fixes: element tiles no longer overlap */
+#grid{grid-template-columns:repeat(18,minmax(50px,1fr))}
+.el{min-width:0;overflow:hidden}
+.el small{max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:8.5px}
+/* pH lab layout (was unstyled) */
+.lab-g{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.lab-box,.lab-res{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;box-sizing:border-box}
+.lab-box h3{margin:0 0 10px;font-size:18px}
+.lab-box select,.lab-box input{width:100%;box-sizing:border-box;max-width:none}
+.lab-box label{display:block;margin:12px 0 4px;font-size:14px;color:var(--mut)}
+.lab-box output{display:block;margin-top:4px;direction:ltr;text-align:start;color:var(--mut);font-size:14px}
+.lab-res p{line-height:1.8}
+@media(max-width:700px){.lab-g{grid-template-columns:1fr}}
+/* categories table */
+#cattbl{margin-top:20px}
+#cattbl h3{margin:0 0 8px;font-size:18px}
+#cattbl table{direction:inherit;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:0}
+#cattbl th{background:var(--bg);color:var(--mut);font-weight:600;font-size:14px;white-space:nowrap}
+#cattbl td{vertical-align:middle;font-size:15px}
+#cattbl tbody tr{cursor:pointer}
+#cattbl tbody tr:hover{background:var(--bg)}
+#cattbl tbody tr.on{outline:2px solid var(--ac);outline-offset:-2px}
+.sw{display:inline-block;width:22px;height:22px;border-radius:5px;vertical-align:middle;border:1px solid var(--line)}
+.syms{direction:ltr;text-align:start;font-size:13px;color:var(--mut);word-spacing:4px}
+td.cn{font-weight:600}
+/* auth */
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#usr{font-size:14px;color:var(--mut)}
+#lgin{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:600;cursor:pointer}
+#dlg{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:22px;width:min(92vw,360px)}
+#dlg::backdrop{background:rgba(0,0,0,.55)}
+#dlg h2{margin:0 0 4px;font-size:22px}#dlg p{margin:0 0 14px;color:var(--mut);font-size:14px}
+#dlg input{width:100%;box-sizing:border-box;max-width:none;margin-bottom:12px}
+.prov{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:11px 14px;margin-bottom:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:16px;cursor:pointer}
+.prov i{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:15px;color:#fff;font-family:Arial,sans-serif}
+.prov.fb i{background:#1877f2}.prov.gg i{background:#fff;color:#ea4335;border:1px solid var(--line)}
+.prov.cr i{background:conic-gradient(#ea4335 0 33%,#fbbc05 0 66%,#34a853 0);color:transparent;position:relative}
+.prov.cr i::after{content:"";position:absolute;inset:7px;border-radius:50%;background:#4285f4;border:2px solid #fff}
+#dlg .x{background:none;border:0;color:var(--mut);font:inherit;cursor:pointer;width:100%;padding:6px}
+
+/* tabs as a clean table (no overlap) */
+.top{flex-wrap:wrap}
+h1{white-space:nowrap}
+#tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible;padding:12px 0}
+#tabs .tab{border-color:var(--line);background:var(--card);color:var(--fg);text-align:center;white-space:normal;padding:10px 4px;font-size:15px}
+#tabs .tab[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:var(--onac)}
+@media(max-width:520px){.acts{flex:1 1 100%;justify-content:space-between}#usr{flex:1}}
+/* search */
+#elbar{flex-direction:column;align-items:stretch;gap:10px}
+#elbar input{max-width:none;width:100%;box-sizing:border-box;flex:none}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{font:inherit;padding:9px 4px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:600}
+#sres{margin-top:10px}
+#sres .list{max-height:42vh;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+#sres table{direction:inherit;margin:0}
+#sres th{color:var(--mut);font-weight:600;font-size:14px;white-space:nowrap}
+.row{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:10px 12px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--fg);font:inherit;cursor:pointer;text-align:start}
+.row:hover{background:var(--bg)}
+.sy2{width:34px;direction:ltr;text-align:start}.nm{flex:1}.mu{color:var(--mut);font-size:13px}
+.sy{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:2px 8px;margin:2px;font:inherit;font-size:13px;cursor:pointer;direction:ltr}
+.eqrow{padding:10px 12px;border-bottom:1px solid var(--line)}
+.eqrow .eqn{font-size:18px;padding:4px 0;overflow-wrap:anywhere}
+.nores{padding:14px;color:var(--mut)}
+
+/* palette */
+:root{--bg:#f1f5f9;--fg:#0f172a;--mut:#58677a;--line:#d5dde6;--ac:#0e7490;--ac2:#d97706;
+--alk:#fb923c;--ale:#facc15;--tra:#60a5fa;--pos:#4ade80;--met:#94a3b8;--non:#2dd4bf;--hal:#f472b6;--nob:#c084fc;--lan:#d6a35c;--act:#f87171}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--card:#121c2e;--fg:#e6edf6;--mut:#94a3b8;--line:#243449;--ac:#38bdf8;--ac2:#fbbf24;--onac:#04202e;--stage:#050a14;
+--alk:#c2570c;--ale:#a98207;--tra:#2f6fd1;--pos:#2e8b57;--met:#64748b;--non:#0f9488;--hal:#c0397a;--nob:#8b4fd0;--lan:#9a6b2c;--act:#c0443f}}
+.rxv{font-size:28px;font-weight:700;margin-bottom:6px}.rxv.ok{color:#22c55e}.rxv.no{color:#ef4444}
+.pre{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+
+/* modern theme v2 */
+:root{--bg:#f4f6fb;--card:#fff;--fg:#111a2e;--mut:#5b6785;--line:#e1e6f0;--ac:#5b4be1;--ac2:#0d9488;--onac:#fff;--elt:#111a2e;
+--alk:#ffb085;--ale:#ffd666;--tra:#7cb7ff;--pos:#8be3a6;--met:#b8c2d6;--non:#5ee0cf;--hal:#ff9ac4;--nob:#c9a8ff;--lan:#f0c27a;--act:#ff9e9e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1020;--card:#151a30;--fg:#eaeefb;--mut:#9aa5c4;--line:#262d4a;--ac:#8b7bff;--ac2:#2dd4bf;--onac:#0c1020;--elt:#fff;--stage:#070a16;
+--alk:#d9692f;--ale:#b8890f;--tra:#3b7ae0;--pos:#2f9e63;--met:#6a7794;--non:#14a89a;--hal:#d04a8b;--nob:#8f5be0;--lan:#b5802e;--act:#d05555}}
+body{background:var(--bg)}
+header{max-width:none;margin:0;padding:16px 16px 8px;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 14%,var(--bg)),var(--bg) 70%)}
+header>*{max-width:1100px;margin-inline:auto}
+.top{flex-direction:column;align-items:stretch;gap:12px}
+.brand svg{width:50px;height:50px;border-radius:14px}
+.acts{flex:none;justify-content:flex-start;gap:8px}#usr{flex:none}
+#lgin,#sgn,#lg{border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer;border:1px solid transparent}
+#lgin{background:linear-gradient(135deg,var(--ac),#9a6bff);color:var(--onac)}
+#sgn{background:var(--ac2);color:var(--onac)}
+#lg{background:transparent;border-color:var(--line);color:var(--fg)}
+#tabs .tab{border-radius:12px;box-shadow:0 1px 2px rgba(15,23,60,.05)}
+#tabs .tab[aria-pressed=true]{background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--onac);border-color:transparent}
+.box,.dcard,.lab-box,.lab-res{border-radius:16px;box-shadow:0 1px 2px rgba(15,23,60,.06),0 10px 28px -14px rgba(15,23,60,.22)}
+.seg button[aria-pressed=true]{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;padding:8px}
+.tile{flex-direction:column;justify-content:center;border:0;border-radius:12px;padding:12px 4px;color:var(--elt);text-align:center;gap:2px;position:relative}
+.tile .sy2{width:auto;font-size:21px;text-align:center}.tile .nm{flex:none;font-size:12px}
+.tile .mu{position:absolute;top:4px;inset-inline-start:7px;font-size:10px;color:inherit;opacity:.7}
+#dm,#dgo{display:none}
+
+h1{letter-spacing:.02em}h1 b{color:var(--ac2)}
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(circle at 50% 40%,#2a1f7a,#0c1020 70%);animation:so .7s ease 2.5s forwards;cursor:pointer}
+#splash svg{width:120px;height:120px;filter:drop-shadow(0 10px 30px rgba(91,75,225,.55));animation:pop .9s cubic-bezier(.2,1.4,.4,1) both}
+#splash .nm{font-size:44px;font-weight:700;color:#fff;letter-spacing:.06em;direction:ltr;animation:fu .8s ease .4s both}
+#splash .nm b{color:#2dd4bf}
+#splash .sub{color:#9aa5c4;font-size:14px;letter-spacing:.2em;direction:ltr;animation:fu .8s ease .8s both}
+@keyframes pop{from{transform:scale(.3) rotate(-120deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes fu{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+@keyframes so{to{opacity:0;visibility:hidden}}
+</style>
+</head>
+<body>
+<div id="splash" onclick="this.style.display='none'"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b4be1"/><stop offset="1" stop-color="#0d9488"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lgs)"/><g fill="none" stroke="#fff" stroke-width="2.4" opacity=".92"><ellipse cx="32" cy="32" rx="26" ry="10" transform="rotate(45 32 32)"/><ellipse cx="32" cy="32" rx="26" ry="10" transform="rotate(-45 32 32)"/></g><circle cx="32" cy="32" r="5" fill="#fff"/><g transform="rotate(45 32 32)"><circle r="3" fill="#ffd166"><animateMotion dur="2.6s" repeatCount="indefinite" path="M58 32A26 10 0 1 1 6 32A26 10 0 1 1 58 32"/></circle></g><g transform="rotate(-45 32 32)"><circle r="3" fill="#7ef0e0"><animateMotion dur="3.2s" repeatCount="indefinite" path="M58 32A26 10 0 1 1 6 32A26 10 0 1 1 58 32"/></circle></g></svg><div class="nm">Electro<b>X</b></div><div class="sub">CHEMISTRY LAB</div></div>
+<header>
+<div class="top"><div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b4be1"/><stop offset="1" stop-color="#0d9488"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lgh)"/><g fill="none" stroke="#fff" stroke-width="2.4" opacity=".92"><ellipse cx="32" cy="32" rx="26" ry="10" transform="rotate(45 32 32)"/><ellipse cx="32" cy="32" rx="26" ry="10" transform="rotate(-45 32 32)"/></g><circle cx="32" cy="32" r="5" fill="#fff"/><g transform="rotate(45 32 32)"><circle r="3" fill="#ffd166"><animateMotion dur="2.6s" repeatCount="indefinite" path="M58 32A26 10 0 1 1 6 32A26 10 0 1 1 58 32"/></circle></g><g transform="rotate(-45 32 32)"><circle r="3" fill="#7ef0e0"><animateMotion dur="3.2s" repeatCount="indefinite" path="M58 32A26 10 0 1 1 6 32A26 10 0 1 1 58 32"/></circle></g></svg><div><h1>Electro<b>X</b></h1></div></div><div class="acts"><span id="usr"></span><button id="lgin" class="tab">تسجيل الدخول</button><button id="sgn" class="tab">إنشاء حساب</button><button id="lg" class="tab">English</button></div></div>
+<nav id="tabs" aria-label="Sections"></nav>
+<div class="bar" id="elbar"><div class="seg" id="seg"><button data-m="el"></button><button data-m="cat"></button><button data-m="eq"></button></div><input id="q" type="search" aria-label="Search" autocomplete="off"><select id="cat" aria-label="Category" hidden></select></div>
+<div id="sres"></div>
+</header>
+<div id="detail"></div>
+<div class="wrap"><div id="grid" hidden></div><div id="mols"></div>
+<div class="pnl" id="p_mass"><div class="box"><h3 data-e="Molar mass calculator">حاسبة الكتلة المولية</h3><p class="hint" data-e="Type a formula, e.g. Ca(OH)2 or Al2(SO4)3">اكتب الصيغة، مثل Ca(OH)2 أو Al2(SO4)3</p><input id="fm" value="Ca(OH)2" dir="ltr" autocomplete="off"><div class="res" id="fmo"></div></div></div>
+<div class="pnl" id="p_bal"><div class="box"><h3 data-e="Chemical equation balancer">موازنة المعادلات الكيميائية</h3><p class="hint" data-e="Write reactants -> products, e.g. Fe + O2 -> Fe2O3">اكتب المتفاعلات -> النواتج، مثل Fe + O2 -> Fe2O3</p><input id="eq" value="Fe + O2 -> Fe2O3" dir="ltr" autocomplete="off"><div class="res" id="beo"></div></div></div>
+<div class="pnl" id="p_sol"><div class="g2"><div class="box"><h3 data-e="Molarity">التركيز المولاري</h3><label for="mf" data-e="Formula">الصيغة</label><input id="mf" value="NaCl" dir="ltr"><label for="mm" data-e="Mass (g)">الكتلة (جم)</label><input id="mm" value="5.85" inputmode="decimal" dir="ltr"><label for="mv" data-e="Volume (mL)">الحجم (مل)</label><input id="mv" value="1000" inputmode="decimal" dir="ltr"><div class="res" id="mo"></div></div><div class="box"><h3 data-e="Dilution: C1V1 = C2V2">التخفيف: C₁V₁ = C₂V₂</h3><p class="hint" data-e="Leave exactly one field empty">اترك خانة واحدة فارغة</p><label for="dc1" data-e="C1 (M)">C₁ (M)</label><input id="dc1" value="1" inputmode="decimal" dir="ltr"><label for="dv1" data-e="V1 (mL)">V₁ (mL)</label><input id="dv1" value="10" inputmode="decimal" dir="ltr"><label for="dc2" data-e="C2 (M)">C₂ (M)</label><input id="dc2" value="0.1" inputmode="decimal" dir="ltr"><label for="dv2" data-e="V2 (mL)">V₂ (mL)</label><input id="dv2" value="" inputmode="decimal" dir="ltr"><div class="res" id="dout"></div></div></div></div>
+<div class="pnl" id="p_gas"><div class="box"><h3 data-e="Ideal gas law: PV = nRT">قانون الغاز المثالي: PV = nRT</h3><p class="hint" data-e="Leave exactly one field empty and it will be solved">اترك خانة واحدة فارغة ليحسبها لك</p><div class="g2"><div><label for="gP" data-e="Pressure (atm)">الضغط (atm)</label><input id="gP" value="1" inputmode="decimal" dir="ltr"><label for="gV" data-e="Volume (L)">الحجم (L)</label><input id="gV" value="" inputmode="decimal" dir="ltr"></div><div><label for="gn" data-e="Moles (mol)">المولات (mol)</label><input id="gn" value="1" inputmode="decimal" dir="ltr"><label for="gT" data-e="Temperature (°C)">الحرارة (°C)</label><input id="gT" value="0" inputmode="decimal" dir="ltr"></div></div><div class="res" id="gout"></div></div></div>
+<div class="pnl" id="p_tit"><div class="box"><h3 data-e="Titration: acid with NaOH">المعايرة: حمض مع NaOH</h3><div class="g2"><div><label for="tac" data-e="Acid">الحمض</label><select id="tac"><option value="s">HCl</option><option value="w">CH₃COOH</option></select><label for="tca" data-e="Acid concentration (M)">تركيز الحمض (M)</label><input id="tca" value="0.1" inputmode="decimal" dir="ltr"></div><div><label for="tva" data-e="Acid volume (mL)">حجم الحمض (مل)</label><input id="tva" value="25" inputmode="decimal" dir="ltr"><label for="tcb" data-e="NaOH concentration (M)">تركيز NaOH (M)</label><input id="tcb" value="0.1" inputmode="decimal" dir="ltr"></div></div><label for="tvb" data-e="Added NaOH volume">حجم NaOH المضاف</label><input id="tvb" type="range" min="0" max="50" step="0.1" value="0"><canvas id="tcv"></canvas><div id="phtube"><div id="tfl"></div><div class="res" id="tout"></div></div></div></div>
+<div class="pnl" id="p_safe"><div class="box"><h3 data-e="Laboratory safety">قواعد السلامة في المختبر</h3><ul><li data-e="Wear a lab coat, goggles and gloves at all times.">ارتدِ معطف المختبر والنظارات الواقية والقفازات دائمًا.</li><li data-e="Never taste or smell chemicals directly; waft vapors gently toward you.">لا تتذوق المواد ولا تشمّها مباشرة، وحرّك البخار نحوك بيدك بلطف.</li><li data-e="Add acid to water, never water to acid.">أضف الحمض إلى الماء، وليس العكس.</li><li data-e="Work in a ventilated area or under a fume hood.">اعمل في مكان جيد التهوية أو تحت شفاط الأبخرة.</li><li data-e="Label every container with its contents and date.">اكتب على كل وعاء محتواه وتاريخه.</li><li data-e="Know where the eyewash, shower and fire extinguisher are.">اعرف مكان غسّالة العيون والدش ومطفأة الحريق.</li><li data-e="Never mix chemicals without checking compatibility; bleach with ammonia releases toxic gas.">لا تخلط مواد دون التأكد من توافقها؛ فمبيّض الكلور مع الأمونيا يطلق غازًا ساميًا.</li><li data-e="Dispose of waste in the proper labelled containers.">تخلّص من النفايات في الحاويات المخصصة والمعنونة.</li></ul></div></div>
+<div class="pnl" id="p_rx"></div>
+<div id="lab">
+<div class="lab-g">
+<div class="lab-box"><h3 data-e="First compound">المركب الأول</h3><select id="s1" aria-label="المركب الأول"></select>
+<label for="c1" data-e="Concentration">التركيز</label><input id="c1" type="range" min="0" max="100" value="67"><output id="o1"></output></div>
+<div class="lab-box"><h3 data-e="Second compound">المركب الثاني</h3><select id="s2" aria-label="المركب الثاني"></select>
+<label for="c2" data-e="Concentration">التركيز</label><input id="c2" type="range" min="0" max="100" value="67"><output id="o2"></output></div>
+</div>
+<div class="lab-res"><div id="phtube"><div id="beaker"></div><div><div class="phv" id="phv">7.00</div><div id="phn" style="font-size:20px;font-weight:600"></div></div></div>
+<div class="scale"><i id="needle"></i></div><div class="ticks"><span>0</span><span>7</span><span>14</span></div>
+<p id="phx"></p></div>
+</div></div>
+<dialog id="dlg"><h2 id="dt"></h2><p id="dp"></p><input id="dn" autocomplete="name"><input id="dm" type="email" autocomplete="email"><button class="prov" id="dgo" style="justify-content:center;background:var(--ac);color:var(--onac);border-color:var(--ac)"></button><button class="prov fb" data-p="Facebook"><i>f</i><span id="t_fb"></span></button><button class="prov gg" data-p="Google"><i>G</i><span id="t_gg"></span></button><button class="prov cr" data-p="Chrome"><i></i><span id="t_cr"></span></button><button class="x" id="dx"></button></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const RAW="H Hydrogen 1.008|He Helium 4.0026|Li Lithium 6.94|Be Beryllium 9.0122|B Boron 10.81|C Carbon 12.011|N Nitrogen 14.007|O Oxygen 15.999|F Fluorine 18.998|Ne Neon 20.18|Na Sodium 22.99|Mg Magnesium 24.305|Al Aluminium 26.982|Si Silicon 28.085|P Phosphorus 30.974|S Sulfur 32.06|Cl Chlorine 35.45|Ar Argon 39.948|K Potassium 39.098|Ca Calcium 40.078|Sc Scandium 44.956|Ti Titanium 47.867|V Vanadium 50.942|Cr Chromium 51.996|Mn Manganese 54.938|Fe Iron 55.845|Co Cobalt 58.933|Ni Nickel 58.693|Cu Copper 63.546|Zn Zinc 65.38|Ga Gallium 69.723|Ge Germanium 72.63|As Arsenic 74.922|Se Selenium 78.971|Br Bromine 79.904|Kr Krypton 83.798|Rb Rubidium 85.468|Sr Strontium 87.62|Y Yttrium 88.906|Zr Zirconium 91.224|Nb Niobium 92.906|Mo Molybdenum 95.95|Tc Technetium 98|Ru Ruthenium 101.07|Rh Rhodium 102.91|Pd Palladium 106.42|Ag Silver 107.87|Cd Cadmium 112.41|In Indium 114.82|Sn Tin 118.71|Sb Antimony 121.76|Te Tellurium 127.6|I Iodine 126.9|Xe Xenon 131.29|Cs Caesium 132.91|Ba Barium 137.33|La Lanthanum 138.91|Ce Cerium 140.12|Pr Praseodymium 140.91|Nd Neodymium 144.24|Pm Promethium 145|Sm Samarium 150.36|Eu Europium 151.96|Gd Gadolinium 157.25|Tb Terbium 158.93|Dy Dysprosium 162.5|Ho Holmium 164.93|Er Erbium 167.26|Tm Thulium 168.93|Yb Ytterbium 173.05|Lu Lutetium 174.97|Hf Hafnium 178.49|Ta Tantalum 180.95|W Tungsten 183.84|Re Rhenium 186.21|Os Osmium 190.23|Ir Iridium 192.22|Pt Platinum 195.08|Au Gold 196.97|Hg Mercury 200.59|Tl Thallium 204.38|Pb Lead 207.2|Bi Bismuth 208.98|Po Polonium 209|At Astatine 210|Rn Radon 222|Fr Francium 223|Ra Radium 226|Ac Actinium 227|Th Thorium 232.04|Pa Protactinium 231.04|U Uranium 238.03|Np Neptunium 237|Pu Plutonium 244|Am Americium 243|Cm Curium 247|Bk Berkelium 247|Cf Californium 251|Es Einsteinium 252|Fm Fermium 257|Md Mendelevium 258|No Nobelium 259|Lr Lawrencium 266|Rf Rutherfordium 267|Db Dubnium 268|Sg Seaborgium 269|Bh Bohrium 270|Hs Hassium 277|Mt Meitnerium 278|Ds Darmstadtium 281|Rg Roentgenium 282|Cn Copernicium 285|Nh Nihonium 286|Fl Flerovium 289|Mc Moscovium 290|Lv Livermorium 293|Ts Tennessine 294|Og Oganesson 294";
+const AR="هيدروجين,هيليوم,ليثيوم,بريليوم,بورون,كربون,نيتروجين,أكسجين,فلور,نيون,صوديوم,مغنيسيوم,ألومنيوم,سيليكون,فوسفور,كبريت,كلور,أرجون,بوتاسيوم,كالسيوم,سكانديوم,تيتانيوم,فاناديوم,كروم,منغنيز,حديد,كوبالت,نيكل,نحاس,زنك,غاليوم,جرمانيوم,زرنيخ,سيلينيوم,بروم,كريبتون,روبيديوم,سترونتيوم,إيتريوم,زركونيوم,نيوبيوم,موليبدينوم,تكنيشيوم,روثينيوم,روديوم,بالاديوم,فضة,كادميوم,إنديوم,قصدير,أنتيمون,تيلوريوم,يود,زينون,سيزيوم,باريوم,لانثانوم,سيريوم,براسيوديميوم,نيوديميوم,بروميثيوم,ساماريوم,يوروبيوم,جادولينيوم,تيربيوم,ديسبروسيوم,هولميوم,إربيوم,ثوليوم,إيتربيوم,لوتيتيوم,هافنيوم,تانتالوم,تنغستن,رينيوم,أوسميوم,إيريديوم,بلاتين,ذهب,زئبق,ثاليوم,رصاص,بزموت,بولونيوم,أستاتين,رادون,فرانسيوم,راديوم,أكتينيوم,ثوريوم,بروتاكتينيوم,يورانيوم,نبتونيوم,بلوتونيوم,أمريسيوم,كوريوم,بيركيليوم,كاليفورنيوم,أينشتاينيوم,فرميوم,مندليفيوم,نوبليوم,لورنسيوم,روثرفورديوم,دوبنيوم,سيبورغيوم,بوهريوم,هاسيوم,مايتنريوم,دارمشتاتيوم,رونتجينيوم,كوبرنيسيوم,نيهونيوم,فليروفيوم,موسكوفيوم,ليفرموريوم,تينيسين,أوغانيسون".split(",");
+const E=RAW.split("|").map((s,i)=>{const p=s.split(" ");return{z:i+1,sym:p[0],en:p[1],mass:+p[2],name:AR[i]}});
+function rg(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r}
+const CATS={alk:["فلز قلوي",[3,11,19,37,55,87],"#e8a07a"],ale:["فلز قلوي أرضي",[4,12,20,38,56,88],"#e6c46a"],nob:["غاز نبيل",[2,10,18,36,54,86,118],"#c4a1e0"],hal:["هالوجين",[9,17,35,53,85,117],"#e58fa6"],met:["شبه فلز",[5,14,32,33,51,52],"#b9a6d6"],non:["لا فلز",[1,6,7,8,15,16,34],"#7fcfc3"],pos:["فلز ما بعد الانتقالي",[13,31,49,50,81,82,83,84,113,114,115,116],"#9fc7a4"],lan:["لانثانيدات",rg(57,71),"#d6b27a"],act:["أكتينيدات",rg(89,103),"#d98f8f"],tra:["فلز انتقالي",[...rg(21,30),...rg(39,48),...rg(72,80),...rg(104,112)],"#8fb7d9"]};
+const catOf=z=>Object.keys(CATS).find(k=>CATS[k][1].includes(z));
+const ORDER="1s 2s 2p 3s 3p 4s 3d 4p 5s 4d 5p 6s 4f 5d 6p 7s 5f 6d 7p".split(" "),CAP={s:2,p:6,d:10,f:14};
+function fill(z){const o=[];let r=z;for(const l of ORDER){if(r<=0)break;const e=Math.min(CAP[l[1]],r);o.push([l,e]);r-=e}return o}
+const NOBLE=[[86,"Rn"],[54,"Xe"],[36,"Kr"],[18,"Ar"],[10,"Ne"],[2,"He"]];
+const OVR={24:"[Ar] 3d5 4s1",29:"[Ar] 3d10 4s1",41:"[Kr] 4d4 5s1",42:"[Kr] 4d5 5s1",44:"[Kr] 4d7 5s1",45:"[Kr] 4d8 5s1",46:"[Kr] 4d10",47:"[Kr] 4d10 5s1",57:"[Xe] 5d1 6s2",58:"[Xe] 4f1 5d1 6s2",64:"[Xe] 4f7 5d1 6s2",78:"[Xe] 4f14 5d9 6s1",79:"[Xe] 4f14 5d10 6s1",89:"[Rn] 6d1 7s2",90:"[Rn] 6d2 7s2",91:"[Rn] 5f2 6d1 7s2",92:"[Rn] 5f3 6d1 7s2",93:"[Rn] 5f4 6d1 7s2",96:"[Rn] 5f7 6d1 7s2",103:"[Rn] 5f14 7s2 7p1"};
+function config(z){let sub,text;
+ if(OVR[z]){text=OVR[z];const m=text.match(/\[(\w+)\]/)[1];const cz=NOBLE.find(n=>n[1]==m)[0];sub=fill(cz).concat(text.replace(/\[\w+\]\s*/,"").split(" ").map(t=>[t.slice(0,2),+t.slice(2)]))}
+ else{sub=fill(z);const c=NOBLE.find(n=>n[0]<z);text=(c?"["+c[1]+"] ":"")+sub.slice(c?fill(c[0]).length:0).map(s=>s[0]+s[1]).join(" ")}
+ const sh=[];sub.forEach(([l,e])=>{sh[+l[0]-1]=(sh[+l[0]-1]||0)+e});return{text,shells:sh.map(x=>x||0)}}
+function pos(z){if(z==1)return[1,1];if(z==2)return[1,18];if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];if(z<=12)return[3,z-10];if(z<=18)return[3,z];
+ if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];if(z<=56)return[6,z-54];if(z<=71)return[9,z-54];if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];if(z<=103)return[10,z-86];return[7,z-100]}
+
+/* المركبات */
+const T=.63,CPK={H:"#f2f2f2",C:"#444b55",O:"#e03c31",N:"#3c63e0",Na:"#a56bd6",Cl:"#3fbf5a"};
+const AN={H:"هيدروجين",C:"كربون",O:"أكسجين",N:"نيتروجين",Na:"صوديوم",Cl:"كلور"};
+const salt=[];for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)for(let z=-1;z<=1;z++)salt.push([(x+y+z)%2?"Cl":"Na",x*.85,y*.85,z*.85]);
+const MOLS=[
+{f:"H₂O",n:"الماء",c:"ذرتا هيدروجين + ذرة أكسجين",d:"جزيء منحنٍ بزاوية نحو 104.5°، روابط تساهمية.",a:[["O",0,0,0],["H",.76,.59,0],["H",-.76,.59,0]]},
+{f:"CO₂",n:"ثاني أكسيد الكربون",c:"ذرة كربون + ذرتا أكسجين",d:"جزيء خطي، رابطتان ثنائيتان.",a:[["C",0,0,0],["O",1.2,0,0],["O",-1.2,0,0]]},
+{f:"CH₄",n:"الميثان",c:"ذرة كربون + 4 ذرات هيدروجين",d:"شكل رباعي الأوجه بزاوية 109.5°.",a:[["C",0,0,0],["H",T,T,T],["H",T,-T,-T],["H",-T,T,-T],["H",-T,-T,T]]},
+{f:"NH₃",n:"الأمونيا",c:"ذرة نيتروجين + 3 ذرات هيدروجين",d:"شكل هرمي ثلاثي، وللنيتروجين زوج إلكترونات حر.",a:[["N",0,.3,0],["H",.94,-.1,0],["H",-.47,-.1,.81],["H",-.47,-.1,-.81]]},
+{f:"HCl",n:"حمض الهيدروكلوريك",c:"ذرة هيدروجين + ذرة كلور",d:"جزيء ثنائي الذرة قطبي.",a:[["H",-.65,0,0],["Cl",.65,0,0]]},
+{f:"NaCl",n:"ملح الطعام",c:"أيونات صوديوم وكلوريد بنسبة 1:1",d:"بلورة مكعبة ترتبط فيها الأيونات برابطة أيونية.",a:salt}];
+const GE={bent:[[.78,.62,0],[-.78,.62,0]],tri:[[1,0,0],[-.5,.87,0],[-.5,-.87,0]],tet:[[.58,.58,.58],[.58,-.58,-.58],[-.58,.58,-.58],[-.58,-.58,.58]],pyr:[[.94,-.33,0],[-.47,-.33,.81],[-.47,-.33,-.81]],oct:[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]};
+const NEWM=[["H₂S","bent","S","H","كبريتيد الهيدروجين","Hydrogen sulfide","ذرة كبريت + ذرتا هيدروجين","1 sulfur + 2 hydrogen atoms","جزيء منحنٍ، غاز رائحته كالبيض الفاسد.","Bent molecule; a gas smelling of rotten eggs."],
+["SO₂","bent","S","O","ثاني أكسيد الكبريت","Sulfur dioxide","ذرة كبريت + ذرتا أكسجين","1 sulfur + 2 oxygen atoms","جزيء منحنٍ، غاز خانق ينتج عن حرق الكبريت.","Bent molecule; a choking gas from burning sulfur."],
+["O₃","bent","O","O","الأوزون","Ozone","3 ذرات أكسجين","3 oxygen atoms","جزيء منحنٍ يحمي الأرض من الأشعة فوق البنفسجية.","Bent molecule that shields Earth from UV."],
+["SO₃","tri","S","O","ثالث أكسيد الكبريت","Sulfur trioxide","ذرة كبريت + 3 ذرات أكسجين","1 sulfur + 3 oxygen atoms","مسطح ثلاثي، أساس حمض الكبريتيك.","Trigonal planar; precursor of sulfuric acid."],
+["BF₃","tri","B","F","ثلاثي فلوريد البورون","Boron trifluoride","ذرة بورون + 3 ذرات فلور","1 boron + 3 fluorine atoms","مسطح ثلاثي بزاوية 120°.","Trigonal planar, 120° angles."],
+["CCl₄","tet","C","Cl","رباعي كلوريد الكربون","Carbon tetrachloride","ذرة كربون + 4 ذرات كلور","1 carbon + 4 chlorine atoms","رباعي الأوجه، مذيب غير قطبي.","Tetrahedral, a nonpolar solvent."],
+["PH₃","pyr","P","H","الفوسفين","Phosphine","ذرة فوسفور + 3 ذرات هيدروجين","1 phosphorus + 3 hydrogen atoms","هرمي ثلاثي، غاز سام.","Trigonal pyramid; a toxic gas."],
+["SF₆","oct","S","F","سداسي فلوريد الكبريت","Sulfur hexafluoride","ذرة كبريت + 6 ذرات فلور","1 sulfur + 6 fluorine atoms","ثماني الأوجه، غاز خامل وثقيل.","Octahedral; a heavy inert gas.",1.2],
+["HF","di","H","F","فلوريد الهيدروجين","Hydrogen fluoride","ذرة هيدروجين + ذرة فلور","1 hydrogen + 1 fluorine atom","ثنائي الذرة شديد القطبية.","Highly polar diatomic."],
+["N₂","di","N","N","النيتروجين","Nitrogen","ذرتا نيتروجين","2 nitrogen atoms","رابطة ثلاثية قوية؛ 78% من الهواء.","Triple bond; 78% of air."],
+["O₂","di","O","O","الأكسجين","Oxygen","ذرتا أكسجين","2 oxygen atoms","رابطة ثنائية؛ ضروري للتنفس.","Double bond; essential for breathing."],
+["Cl₂","di","Cl","Cl","الكلور","Chlorine","ذرتا كلور","2 chlorine atoms","غاز أخضر مصفر سام.","A toxic yellow-green gas."],
+["CO","di","C","O","أول أكسيد الكربون","Carbon monoxide","ذرة كربون + ذرة أكسجين","1 carbon + 1 oxygen atom","غاز سام عديم اللون والرائحة.","A colorless, odorless toxic gas."]];
+Object.assign(AN,{S:"كبريت",F:"فلور",B:"بورون",P:"فوسفور"});Object.assign(CPK,{S:"#e8c93a",F:"#7ae0a0",B:"#f2a2a2",P:"#ff9a2e"});
+NEWM.forEach(x=>{const b=x[10]||1.1;MOLS.push({f:x[0],n:x[4],c:x[6],d:x[8],a:x[1]=="di"?[[x[2],-.6,0,0],[x[3],.6,0,0]]:[[x[2],0,0,0],...GE[x[1]].map(d=>[x[3],d[0]*b,d[1]*b,d[2]*b])]})});
+
+/* المشهد ثلاثي الأبعاد */
+const stage=document.getElementById("stage"),cv=null;
+const det=document.getElementById("detail");
+det.innerHTML='<div class="dcard"><div id="stage"><canvas id="cv"></canvas><small data-e="Drag to rotate">اسحب بإصبعك لتدوير الشكل</small></div><div class="info" id="info"></div></div>';
+const cvs=document.getElementById("cv"),st=document.getElementById("stage");
+const R=new THREE.WebGLRenderer({canvas:cvs,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+const S=new THREE.Scene(),Cam=new THREE.PerspectiveCamera(45,1,.1,100);
+S.add(new THREE.AmbientLight(0xffffff,.6));const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(3,5,6);S.add(dl);
+const G=new THREE.Group();S.add(G);let spins=[],drag=false,lx=0,ly=0;
+function size(){const w=st.clientWidth,h=st.clientHeight;R.setSize(w,h,false);Cam.aspect=w/h;Cam.updateProjectionMatrix()}
+addEventListener("resize",size);
+cvs.onpointerdown=e=>{drag=true;lx=e.clientX;ly=e.clientY;cvs.setPointerCapture(e.pointerId)};
+cvs.onpointerup=()=>drag=false;
+cvs.onpointermove=e=>{if(!drag)return;G.rotation.y+=(e.clientX-lx)*.01;G.rotation.x+=(e.clientY-ly)*.01;lx=e.clientX;ly=e.clientY};
+function clear(){while(G.children.length)G.remove(G.children[0]);spins=[];G.rotation.set(0,0,0)}
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.45,metalness:.1});
+function buildAtom(e){clear();const k=catOf(e.z),cf=config(e.z);
+ const nuc=new THREE.Mesh(new THREE.SphereGeometry(.45,32,32),mat(CATS[k][2]));G.add(nuc);
+ const eg=new THREE.SphereGeometry(.09,16,16),em=new THREE.MeshStandardMaterial({color:0x3aa0ff,emissive:0x1a5fa8});
+ cf.shells.forEach((c,i)=>{const r=1+.42*i,tilt=new THREE.Group();tilt.rotation.set(i*.7,i*1.1,0);
+  tilt.add(new THREE.Mesh(new THREE.TorusGeometry(r,.012,8,80),new THREE.MeshBasicMaterial({color:0x8a96a3})));
+  const sp=new THREE.Group();for(let j=0;j<c;j++){const a=2*Math.PI*j/c,m=new THREE.Mesh(eg,em);m.position.set(r*Math.cos(a),r*Math.sin(a),0);sp.add(m)}
+  tilt.add(sp);G.add(tilt);spins.push([sp,.9/(i+1)])});
+ Cam.position.set(0,0,(1+.42*cf.shells.length)*2.6+1)}
+function buildMol(m){clear();const A=m.a,sc=m.f=="NaCl"?1:1.2;
+ A.forEach(a=>{const s=new THREE.Mesh(new THREE.SphereGeometry(a[0]=="H"?.28:a[0]=="Na"?.34:.4,24,24),mat(CPK[a[0]]));s.position.set(a[1]*sc,a[2]*sc,a[3]*sc);G.add(s)});
+ const lim=m.f=="NaCl"?.9:1.3;
+ for(let i=0;i<A.length;i++)for(let j=i+1;j<A.length;j++){const p=new THREE.Vector3(A[i][1],A[i][2],A[i][3]).multiplyScalar(sc),q=new THREE.Vector3(A[j][1],A[j][2],A[j][3]).multiplyScalar(sc),d=p.distanceTo(q);
+  if(d<lim*sc&&d>0){const b=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,d,10),mat(0x9aa4ae));b.position.copy(p).add(q).multiplyScalar(.5);b.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),q.clone().sub(p).normalize());G.add(b)}}
+ Cam.position.set(0,0,m.f=="NaCl"?7:5)}
+function loop(){requestAnimationFrame(loop);if(!drag)G.rotation.y+=.004;spins.forEach(s=>s[0].rotation.z+=s[1]*.02);R.render(S,Cam)}
+
+/* الواجهة */
+const info=document.getElementById("info"),grid=document.getElementById("grid"),mols=document.getElementById("mols"),q=document.getElementById("q"),cat=document.getElementById("cat");
+cat.innerHTML='<option value="">كل الفئات</option>'+Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("");
+const btns={};
+E.forEach(e=>{const[r,c]=pos(e.z);const b=document.createElement("button");b.className="el";b.style.gridRow=r;b.style.gridColumn=c;b.style.background=`var(--${catOf(e.z)})`;
+ b.innerHTML=`<i>${e.z}</i><b>${e.sym}</b><small>${e.name}</small>`;b.setAttribute("aria-label",`${e.name}، العدد الذري ${e.z}`);b.onclick=()=>showEl(e.z);btns[e.z]=b;grid.appendChild(b)});
+const sp=document.createElement("div");sp.style.gridRow=8;sp.style.gridColumn="1/-1";sp.style.height="8px";grid.appendChild(sp);
+MOLS.forEach((m,i)=>{const b=document.createElement("button");b.className="mol";b.innerHTML=`<b>${m.f}</b>${m.n}`;b.onclick=()=>{showMol(i);detail.scrollIntoView({behavior:"smooth",block:"start"})};mols.appendChild(b)});
+function showEl(z){const e=E[z-1],k=catOf(z),cf=config(z);
+ document.querySelectorAll(".el.sel").forEach(x=>x.classList.remove("sel"));btns[z].classList.add("sel");
+ info.innerHTML=`<h2>${e.name} (${e.sym})</h2><h3>${e.en}</h3><dl><dt>الفئة</dt><dd><span class="chip" style="background:${CATS[k][2]}">${CATS[k][0]}</span></dd><dt>العدد الذري</dt><dd>${z}</dd><dt>البروتونات</dt><dd>${z}</dd><dt>الإلكترونات</dt><dd>${z} (ذرة متعادلة)</dd><dt>النيوترونات</dt><dd>حوالي ${Math.round(e.mass)-z}</dd><dt>الكتلة الذرية</dt><dd>${e.mass} u</dd><dt>مستويات الطاقة</dt><dd>${cf.shells.join("، ")}</dd><dt>التوزيع الإلكتروني</dt><dd style="direction:ltr;text-align:right">${cf.text}</dd></dl>`;
+ buildAtom(e);size()}
+function showMol(i){const m=MOLS[i];document.querySelectorAll(".mol.sel").forEach(x=>x.classList.remove("sel"));mols.children[i].classList.add("sel");
+ const cnt={};m.a.forEach(a=>cnt[a[0]]=(cnt[a[0]]||0)+1);
+ info.innerHTML=`<h2>${m.n}</h2><h3>${m.f}</h3><dl><dt>التركيب</dt><dd>${m.c}</dd><dt>الذرات</dt><dd>${Object.entries(cnt).map(([s,n])=>`${AN[s]} × ${n}`).join("، ")}</dd><dt>الشكل</dt><dd>${m.d}</dd></dl>`;buildMol(m);size()}
+
+/* ===== معمل الـ pH =====
+ النوع: n متعادل، sa حمض قوي، sb قاعدة قوية، w حمض ضعيف، wb قاعدة ضعيفة،
+ a كاتيون حمضي (مثل الأمونيوم)، hyd كاتيون فلزي يتحلل، b أنيون قاعدي، amp أمفوتيري */
+const CP=[
+{id:"NaCl",n:"كلوريد الصوديوم",t:"n"},{id:"KCl",n:"كلوريد البوتاسيوم",t:"n"},{id:"NaNO₃",n:"نترات الصوديوم",t:"n"},{id:"CaCl₂",n:"كلوريد الكالسيوم",t:"n"},
+{id:"MgCl₂",n:"كلوريد المغنيسيوم",t:"hyd",pk:11.4,m:2},
+{id:"NH₄Cl",n:"كلوريد الأمونيوم",t:"a",pk:9.25},
+{id:"AlCl₃",n:"كلوريد الألومنيوم",t:"hyd",pk:5.0,m:1},
+{id:"FeCl₃",n:"كلوريد الحديد III",t:"hyd",pk:2.2,m:1},
+{id:"CuSO₄",n:"كبريتات النحاس",t:"hyd",pk:7.5,m:1},
+{id:"HCl",n:"حمض الهيدروكلوريك",t:"sa",m:1},{id:"H₂SO₄",n:"حمض الكبريتيك",t:"sa",m:2},
+{id:"CH₃COOH",n:"حمض الخليك (الخل)",t:"w",pk:4.76},
+{id:"NaOH",n:"هيدروكسيد الصوديوم",t:"sb"},{id:"KOH",n:"هيدروكسيد البوتاسيوم",t:"sb"},
+{id:"NH₃",n:"الأمونيا",t:"wb",pk:4.75},
+{id:"NaHCO₃",n:"بيكربونات الصوديوم",t:"amp"},
+{id:"Na₂CO₃",n:"كربونات الصوديوم",t:"b",pk:10.33,m:2},
+{id:"CH₃COONa",n:"خلات الصوديوم",t:"b",pk:4.76,m:1}];
+const s1=document.getElementById("s1"),s2=document.getElementById("s2"),c1=document.getElementById("c1"),c2=document.getElementById("c2");
+const opts='<option value="-1">لا شيء</option>'+CP.map((c,i)=>`<option value="${i}">${c.n} (${c.id})</option>`).join("");
+s1.innerHTML=opts;s2.innerHTML=opts;s1.value=5;s2.value=4;
+const conc=v=>Math.pow(10,-3+ +v/100*3);
+function solvePH(L){const Kw=1e-14;
+ const F=h=>{let q=h-Kw/h;
+  L.forEach(([c,C])=>{const m=c.m||1;
+   if(c.t=="sa")q-=C*m;
+   else if(c.t=="sb")q+=C;
+   else if(c.t=="a"){const K=Math.pow(10,-c.pk);q+=C*h/(h+K)-C}
+   else if(c.t=="hyd"){const K=Math.pow(10,-c.pk);q+=C*m*h/(h+K)-C*m}
+   else if(c.t=="w"){const K=Math.pow(10,-c.pk);q-=C*K/(K+h)}
+   else if(c.t=="b"){const K=Math.pow(10,-c.pk);q+=C*m-C*m*K/(K+h)}
+   else if(c.t=="wb"){const K=Math.pow(10,-(14-c.pk));q+=C*h/(h+K)}
+   else if(c.t=="amp"){const K1=Math.pow(10,-6.35),K2=Math.pow(10,-10.33),D=h*h+K1*h+K1*K2;q+=C-C*(K1*h+2*K1*K2)/D}});
+  return q};
+ let lo=-14.5,hi=0.5;for(let i=0;i<200;i++){const mid=(lo+hi)/2;F(Math.pow(10,mid))>0?hi=mid:lo=mid}
+ return -(lo+hi)/2}
+function phColor(p){const st=[[0,"#d7261e"],[2,"#f26a21"],[4,"#f6c026"],[6,"#9bd03a"],[7,"#2fb35a"],[9,"#1aa6a6"],[11,"#2a6fdb"],[14,"#6a3fc2"]];
+ for(let i=1;i<st.length;i++)if(p<=st[i][0])return st[i][1];return st[st.length-1][1]}
+function phName(p){return p<6.5?(p<3?"حمضي قوي":"حمضي"):p>7.5?(p>11?"قلوي قوي":"قلوي"):"متعادل تقريبًا"}
+function updLab(){
+ const a=+s1.value,b=+s2.value,L=[];
+ o1.textContent=a<0?"":conc(c1.value).toFixed(3)+" مول/لتر";o2.textContent=b<0?"":conc(c2.value).toFixed(3)+" مول/لتر";
+ if(a>=0)L.push([CP[a],conc(c1.value)]);if(b>=0)L.push([CP[b],conc(c2.value)]);
+ const p=L.length?solvePH(L):7,pe=Math.max(0,Math.min(14,p));
+ phv.textContent=p.toFixed(2);phn.textContent=phName(p);needle.style.left=(pe/14*100)+"%";beaker.style.background=phColor(pe);
+ let x="";
+ if(a>=0&&b>=0){const pa=solvePH([L[0]]),pb=solvePH([L[1]]);
+  x=`المركب الأول وحده: pH ${pa.toFixed(2)}، والثاني وحده: pH ${pb.toFixed(2)}. بعد الخلط أصبح ${p.toFixed(2)}. `;
+  const lo=Math.min(pa,pb),hi=Math.max(pa,pb);
+  if(Math.abs(pa-7)<.3&&Math.abs(pb-7)<.3)x+="كلاهما متعادل، فلا تغيّر يُذكر.";
+  else if(p<lo-.05)x+="الخليط صار أكثر حموضة من كل منهما منفردًا.";
+  else if(p>hi+.05)x+="الخليط صار أكثر قلوية من كل منهما منفردًا.";
+  else if(Math.abs(p-pa)<.05||Math.abs(p-pb)<.05)x+="أحد المركبين يتحكم في النتيجة ولم يغيّرها الآخر.";
+  else x+="النتيجة وسطى بين الاثنين، وتميل لجهة الأقوى تأثيرًا.";
+  const ids=[CP[a].t,CP[b].t];
+  if(ids.includes("hyd")&&ids.includes("sb"))x+=" تنبيه: الأيونات الفلزية مع القلوي قد ترسّب هيدروكسيدًا في الواقع، فالرقم تقريبي.";
+  if((ids.includes("w")&&ids.includes("b"))||(ids.includes("wb")&&ids.includes("a")))x+=" هذا محلول منظّم، لذلك يقاوم تغيّر الـ pH.";
+ }else if(a>=0||b>=0){x="اختر مركبًا ثانيًا لترى تأثير الخلط."}
+ else x="اختر مركبًا أو أكثر.";
+ phx.textContent=x}
+[s1,s2,c1,c2].forEach(e=>e.oninput=updLab);
+
+/* ===== اللغة والبيانات الإنجليزية ===== */
+let lang="ar";const cur={m:"el",z:1,i:0};const L=(a,b)=>lang=="ar"?a:b;
+const CATEN={alk:"Alkali metal",ale:"Alkaline earth metal",nob:"Noble gas",hal:"Halogen",met:"Metalloid",non:"Reactive nonmetal",pos:"Post-transition metal",lan:"Lanthanide",act:"Actinide",tra:"Transition metal"};
+const AE={H:"Hydrogen",C:"Carbon",O:"Oxygen",N:"Nitrogen",Na:"Sodium",Cl:"Chlorine"};
+const MOLEN=[{n:"Water",c:"2 hydrogen atoms + 1 oxygen atom",d:"Bent molecule (about 104.5°) with covalent bonds."},{n:"Carbon dioxide",c:"1 carbon atom + 2 oxygen atoms",d:"Linear molecule with two double bonds."},{n:"Methane",c:"1 carbon atom + 4 hydrogen atoms",d:"Tetrahedral, bond angle 109.5°."},{n:"Ammonia",c:"1 nitrogen atom + 3 hydrogen atoms",d:"Trigonal pyramid; nitrogen holds a lone pair."},{n:"Hydrochloric acid",c:"1 hydrogen atom + 1 chlorine atom",d:"Polar diatomic molecule."},{n:"Table salt",c:"Sodium and chloride ions, 1:1",d:"Cubic crystal held by ionic bonds."}];
+const CPEN=["Sodium chloride","Potassium chloride","Sodium nitrate","Calcium chloride","Magnesium chloride","Ammonium chloride","Aluminium chloride","Iron(III) chloride","Copper sulfate","Hydrochloric acid","Sulfuric acid","Acetic acid (vinegar)","Sodium hydroxide","Potassium hydroxide","Ammonia","Sodium bicarbonate","Sodium carbonate","Sodium acetate"];
+const MASS={};E.forEach(e=>MASS[e.sym]=e.mass);Object.assign(AE,{S:"Sulfur",F:"Fluorine",B:"Boron",P:"Phosphorus"});NEWM.forEach(x=>MOLEN.push({n:x[5],c:x[7],d:x[9]}));
+const TABS=[["el","العناصر","Elements"],["mol","المركبات","Compounds"],["ph","معمل الـ pH","pH lab"],["mass","الكتلة المولية","Molar mass"],["bal","موازنة المعادلات","Balancer"],["sol","المحاليل","Solutions"],["gas","الغازات","Gas laws"],["tit","المعايرة","Titration"],["rx","اصنع وجرّب","Build & React"],["safe","السلامة","Safety"]];
+function fillCP(){const v1=s1.value,v2=s2.value,o='<option value="-1">'+L("لا شيء","None")+'</option>'+CP.map((c,i)=>`<option value="${i}">${L(c.n,CPEN[i])} (${c.id})</option>`).join("");s1.innerHTML=o;s2.innerHTML=o;s1.value=v1;s2.value=v2}
+function applyLang(){const en=lang=="en";document.documentElement.lang=lang;document.documentElement.dir=en?"ltr":"rtl";lg.textContent=en?"العربية":"English";
+ document.querySelectorAll("[data-e]").forEach(e=>{if(e._a==null)e._a=e.textContent;e.textContent=en?e.dataset.e:e._a});
+ document.querySelectorAll("[data-pe]").forEach(e=>{if(e._a==null)e._a=e.placeholder;e.placeholder=en?e.dataset.pe:e._a});
+ document.title="ElectroX";
+ tabs.innerHTML="";TABS.forEach(([id,a,b])=>{const x=document.createElement("button");x.className="tab";x.dataset.id=id;x.textContent=en?b:a;x.onclick=()=>tab(id);tabs.appendChild(x)});
+ const cv0=cat.value;cat.innerHTML=`<option value="">${L("كل الفئات","All categories")}</option>`+Object.entries(CATS).map(([k,v])=>`<option value="${k}">${en?CATEN[k]:v[0]}</option>`).join("");cat.value=cv0;
+ E.forEach(e=>btns[e.z].querySelector("small").textContent=en?e.en:e.name);
+ MOLS.forEach((m,i)=>mols.children[i].innerHTML=`<b>${m.f}</b>${en?MOLEN[i].n:m.n}`);
+ fillCP();renderCats();authUI();fillRx();tab(cur.m)}
+lg.onclick=()=>{lang=lang=="ar"?"en":"ar";applyLang()};
+
+/* ===== عرض العنصر والمركب (ثنائي اللغة) ===== */
+function showEl(z){cur.z=z;const e=E[z-1],k=catOf(z),cf=config(z),en=lang=="en";
+ document.querySelectorAll(".el.sel").forEach(x=>x.classList.remove("sel"));btns[z].classList.add("sel");
+ info.innerHTML=`<h2>${en?e.en:e.name} (${e.sym})</h2><h3>${en?e.name:e.en}</h3><dl><dt>${L("الفئة","Category")}</dt><dd><span class="chip" style="background:${CATS[k][2]}">${en?CATEN[k]:CATS[k][0]}</span></dd><dt>${L("العدد الذري","Atomic number")}</dt><dd>${z}</dd><dt>${L("البروتونات","Protons")}</dt><dd>${z}</dd><dt>${L("الإلكترونات","Electrons")}</dt><dd>${z}</dd><dt>${L("النيوترونات","Neutrons")}</dt><dd>${L("حوالي ","≈ ")}${Math.round(e.mass)-z}</dd><dt>${L("الكتلة الذرية","Atomic mass")}</dt><dd>${e.mass} u</dd><dt>${L("مستويات الطاقة","Shells")}</dt><dd>${cf.shells.join(", ")}</dd><dt>${L("التوزيع الإلكتروني","Configuration")}</dt><dd style="direction:ltr;text-align:start">${cf.text}</dd></dl>`;
+ buildAtom(e);size()}
+function showMol(i){cur.i=i;const m=MOLS[i],me=MOLEN[i],en=lang=="en";document.querySelectorAll(".mol.sel").forEach(x=>x.classList.remove("sel"));mols.children[i].classList.add("sel");
+ const cnt={};m.a.forEach(a=>cnt[a[0]]=(cnt[a[0]]||0)+1);
+ info.innerHTML=`<h2>${en?me.n:m.n}</h2><h3>${m.f}</h3><dl><dt>${L("التركيب","Composition")}</dt><dd>${en?me.c:m.c}</dd><dt>${L("الذرات","Atoms")}</dt><dd>${Object.entries(cnt).map(([s,n])=>`${en?AE[s]:AN[s]} × ${n}`).join(", ")}</dd><dt>${L("الشكل","Shape")}</dt><dd>${en?me.d:m.d}</dd></dl>`;buildMol(m);size()}
+
+/* ===== معمل الـ pH (ثنائي اللغة) ===== */
+function phName(p){return p<6.5?(p<3?L("حمضي قوي","Strongly acidic"):L("حمضي","Acidic")):p>7.5?(p>11?L("قلوي قوي","Strongly basic"):L("قلوي","Basic")):L("متعادل تقريبًا","Near neutral")}
+function updLab(){const a=+s1.value,b=+s2.value,Q=[];
+ o1.textContent=a<0?"":conc(c1.value).toFixed(3)+" M";o2.textContent=b<0?"":conc(c2.value).toFixed(3)+" M";
+ if(a>=0)Q.push([CP[a],conc(c1.value)]);if(b>=0)Q.push([CP[b],conc(c2.value)]);
+ const p=Q.length?solvePH(Q):7,pe=Math.max(0,Math.min(14,p));
+ phv.textContent=p.toFixed(2);phn.textContent=phName(p);needle.style.left=(pe/14*100)+"%";beaker.style.background=phColor(pe);
+ let x="";
+ if(a>=0&&b>=0){const pa=solvePH([Q[0]]),pb=solvePH([Q[1]]),lo=Math.min(pa,pb),hi=Math.max(pa,pb);
+  x=L(`الأول وحده: pH ${pa.toFixed(2)}، والثاني وحده: ${pb.toFixed(2)}. بعد الخلط: ${p.toFixed(2)}. `,`First alone: pH ${pa.toFixed(2)}; second alone: ${pb.toFixed(2)}. Mixed: ${p.toFixed(2)}. `);
+  if(Math.abs(pa-7)<.3&&Math.abs(pb-7)<.3)x+=L("كلاهما متعادل، فلا تغيّر يُذكر.","Both are neutral, so there is no notable change.");
+  else if(p<lo-.05)x+=L("الخليط أكثر حموضة من كل منهما منفردًا.","The mixture is more acidic than either alone.");
+  else if(p>hi+.05)x+=L("الخليط أكثر قلوية من كل منهما منفردًا.","The mixture is more basic than either alone.");
+  else if(Math.abs(p-pa)<.05||Math.abs(p-pb)<.05)x+=L("أحد المركبين يتحكم في النتيجة ولم يغيّرها الآخر.","One compound dominates and the other barely changes it.");
+  else x+=L("النتيجة وسطى بين الاثنين.","The result lies between the two.");
+  const t=[CP[a].t,CP[b].t];
+  if(t.includes("hyd")&&t.includes("sb"))x+=L(" تنبيه: قد يترسّب هيدروكسيد الفلز، فالرقم تقريبي."," Note: a metal hydroxide may precipitate, so the value is approximate.");
+  if((t.includes("w")&&t.includes("b"))||(t.includes("wb")&&t.includes("a")))x+=L(" هذا محلول منظّم يقاوم تغيّر الـ pH."," This is a buffer, so it resists pH change.")
+ }else x=a>=0||b>=0?L("اختر مركبًا ثانيًا لترى تأثير الخلط.","Pick a second compound to see the mixing effect."):L("اختر مركبًا أو أكثر.","Pick one or more compounds.");
+ phx.textContent=x}
+
+/* ===== الكتلة المولية والموازنة والمحاليل والغازات ===== */
+function parseF(s){let i=0;s=s.replace(/[₀-₉]/g,c=>c.charCodeAt(0)-8320).replace(/\s+/g,"");
+ const num=()=>{const m=s.slice(i).match(/^\d+/);if(m){i+=m[0].length;return +m[0]}return 1};
+ function grp(){const o={};while(i<s.length){const c=s[i];
+  if(c=="("||c=="["){i++;const g=grp(),n=num();for(const k in g)o[k]=(o[k]||0)+g[k]*n}
+  else if(c==")"||c=="]"){i++;return o}
+  else if(/[A-Z]/.test(c)){let y=c;i++;while(i<s.length&&/[a-z]/.test(s[i]))y+=s[i++];if(!MASS[y])throw 0;o[y]=(o[y]||0)+num()}
+  else throw 0}return o}
+ const r=grp();if(i<s.length||!Object.keys(r).length)throw 0;return r}
+const molM=o=>Object.entries(o).reduce((a,[k,n])=>a+MASS[k]*n,0);
+function runMass(){try{const o=parseF(fm.value),ent=Object.entries(o),t=molM(o);
+ fmo.innerHTML=`<div class="big">${t.toFixed(3)} <small>g/mol</small></div><table><tr><th>${L("العنصر","Element")}</th><th>${L("العدد","Count")}</th><th>${L("الكتلة","Mass")}</th><th>%</th></tr>`+ent.map(([k,n])=>`<tr><td>${k}</td><td>${n}</td><td>${(MASS[k]*n).toFixed(3)}</td><td>${(MASS[k]*n/t*100).toFixed(2)}</td></tr>`).join("")+"</table>"}
+ catch(e){fmo.textContent=L("صيغة غير صالحة. استخدم رموزًا مثل H2O أو Ca(OH)2 (الحرف الأول كبير).","Invalid formula. Use symbols like H2O or Ca(OH)2 (first letter capital).")}}
+function balance(str){const[l,r]=str.replace(/→|=/g,"->").split("->");if(!r)throw 0;
+ const A=l.split("+"),B=r.split("+"),sp=[...A,...B].map(x=>x.trim().replace(/^\d+\s*/,"")),P=sp.map(parseF),el=[...new Set(P.flatMap(Object.keys))],n=sp.length;
+ const M=el.map(e=>P.map((p,j)=>(p[e]||0)*(j<A.length?1:-1)));let row=0;const piv=[];
+ for(let c=0;c<n&&row<M.length;c++){let b=row;for(let k=row;k<M.length;k++)if(Math.abs(M[k][c])>Math.abs(M[b][c]))b=k;
+  if(Math.abs(M[b][c])<1e-9)continue;[M[row],M[b]]=[M[b],M[row]];const d=M[row][c];M[row]=M[row].map(v=>v/d);
+  for(let k=0;k<M.length;k++)if(k!=row){const f=M[k][c];if(f)M[k]=M[k].map((v,j)=>v-f*M[row][j])}piv.push(c);row++}
+ const fr=[...Array(n).keys()].filter(c=>!piv.includes(c));if(fr.length!=1)throw 0;
+ const x=Array(n).fill(0);x[fr[0]]=1;piv.forEach((c,i)=>x[c]=-M[i][fr[0]]);
+ for(let k=1;k<=120;k++){const y=x.map(v=>v*k);if(y.every(v=>v>1e-9&&Math.abs(v-Math.round(v))<1e-6))return[sp,y.map(Math.round),A.length]}throw 0}
+function runBal(){try{const[sp,y,nl]=balance(eq.value),f=(a,b)=>sp.slice(a,b).map((s,i)=>(y[a+i]>1?y[a+i]:"")+s).join(" + ");beo.innerHTML=`<div class="eqn">${f(0,nl)} → ${f(nl,sp.length)}</div>`}
+ catch(e){beo.textContent=L("تعذّرت الموازنة. اكتب المعادلة هكذا: Fe + O2 -> Fe2O3","Could not balance. Write it like: Fe + O2 -> Fe2O3")}}
+function runMol(){try{const Mm=molM(parseF(mf.value)),g=+mm.value,v=+mv.value/1000;if(!(g>0&&v>0))throw 0;const n=g/Mm;
+ mo.innerHTML=`${L("عدد المولات","Moles")}: <b>${n.toFixed(4)}</b> mol<br>${L("التركيز المولاري","Molarity")}: <b>${(n/v).toFixed(4)}</b> M<br>${L("الكتلة المولية","Molar mass")}: ${Mm.toFixed(2)} g/mol`}
+ catch(e){mo.textContent=L("أدخل صيغة وكتلة وحجمًا صالحين.","Enter a valid formula, mass and volume.")}}
+function solve1(ids,names,fn,out){const v=ids.map(x=>x.value===""?null:+x.value);if(v.filter(x=>x==null).length!=1||v.some(x=>x!=null&&isNaN(x))){out.textContent=L("اترك خانة واحدة فارغة ليحسبها لك.","Leave exactly one field empty and it will be solved.");return}
+ const i=v.indexOf(null),r=fn(v,i);out.innerHTML=`${names[i]} = <b>${isFinite(r)?+r.toPrecision(5):"—"}</b>`}
+function runDil(){solve1([dc1,dv1,dc2,dv2],["C₁ (M)","V₁ (mL)","C₂ (M)","V₂ (mL)"],(v,i)=>i==0?v[2]*v[3]/v[1]:i==1?v[2]*v[3]/v[0]:i==2?v[0]*v[1]/v[3]:v[0]*v[1]/v[2],dout)}
+function runGas(){const R=.082057;solve1([gP,gV,gn,gT],["P (atm)","V (L)","n (mol)","T (°C)"],(v,i)=>{const T=v[3]+273.15;return i==0?v[2]*R*T/v[1]:i==1?v[2]*R*T/v[0]:i==2?v[0]*v[1]/(R*T):v[0]*v[1]/(v[2]*R)-273.15},gout)}
+
+/* ===== المعايرة ===== */
+function titPH(Vb){const Ca=+tca.value,Va=+tva.value,Cb=+tcb.value,w=tac.value=="w",VT=Va+Vb;return solvePH([[w?{t:"w",pk:4.76}:{t:"sa",m:1},Ca*Va/VT],[{t:"sb"},Cb*Vb/VT]])}
+function runTit(reset){const Ca=+tca.value,Va=+tva.value,Cb=+tcb.value;if(!(Ca>0&&Va>0&&Cb>0))return;
+ const Ve=Ca*Va/Cb,Vm=Ve*2;tvb.max=Vm.toFixed(2);tvb.step=(Vm/300).toFixed(3);if(reset)tvb.value=0;const Vb=+tvb.value,ph=titPH(Vb);
+ const c=tcv,d=devicePixelRatio||1,W=c.width=c.clientWidth*d,H=c.height=240*d,x=c.getContext("2d"),cs=getComputedStyle(document.documentElement),fg=cs.getPropertyValue("--fg"),ac=cs.getPropertyValue("--ac"),mu=cs.getPropertyValue("--mut");
+ const pl=34*d,pr=10*d,pt=10*d,pb=22*d,X=v=>pl+v/Vm*(W-pl-pr),Y=p=>H-pb-p/14*(H-pb-pt);
+ x.clearRect(0,0,W,H);x.font=11*d+"px sans-serif";x.fillStyle=mu;x.strokeStyle=mu;x.lineWidth=1;
+ [0,7,14].forEach(p=>{x.beginPath();x.moveTo(pl,Y(p));x.lineTo(W-pr,Y(p));x.globalAlpha=.3;x.stroke();x.globalAlpha=1;x.fillText(p,6*d,Y(p)+4*d)});
+ x.setLineDash([4*d,4*d]);x.beginPath();x.moveTo(X(Ve),pt);x.lineTo(X(Ve),H-pb);x.stroke();x.setLineDash([]);
+ x.fillText("mL",W-pr-20*d,H-6*d);x.strokeStyle=ac;x.lineWidth=2.5*d;x.beginPath();
+ for(let k=0;k<=150;k++){const v=Vm*k/150,p=Math.max(0,Math.min(14,titPH(v)));k?x.lineTo(X(v),Y(p)):x.moveTo(X(v),Y(p))}x.stroke();
+ x.fillStyle=fg;x.beginPath();x.arc(X(Vb),Y(Math.max(0,Math.min(14,ph))),6*d,0,7);x.fill();
+ tfl.style.background=ph>8.2?"#e8458b":"rgba(150,190,230,.25)";
+ tout.innerHTML=`${L("المضاف","Added")}: <b>${Vb.toFixed(2)}</b> mL<br>pH: <b>${ph.toFixed(2)}</b><br>${L("نقطة التكافؤ","Equivalence point")}: ${Ve.toFixed(2)} mL<br>${L("الفينولفثالين: ","Phenolphthalein: ")}${ph>8.2?L("وردي","pink"):L("عديم اللون","colorless")}`}
+[tca,tva,tcb,tac].forEach(e=>e.oninput=()=>runTit(1));tvb.oninput=()=>runTit(0);
+fm.oninput=runMass;eq.oninput=runBal;[mf,mm,mv].forEach(e=>e.oninput=runMol);[dc1,dv1,dc2,dv2].forEach(e=>e.oninput=runDil);[gP,gV,gn,gT].forEach(e=>e.oninput=runGas);
+addEventListener("resize",()=>{if(cur.m=="tit")runTit(0)});
+
+/* ===== التبويبات ===== */
+function tab(id){cur.m=id;
+ grid.style.display="none";mols.style.display=id=="mol"?"grid":"none";lab.style.display=id=="ph"?"block":"none";
+ document.querySelectorAll(".pnl").forEach(p=>p.style.display=p.id=="p_"+id?"block":"none");
+ elbar.style.display=id=="el"?"flex":"none";sres.style.display=id=="el"?"block":"none";detail.style.display=id=="el"||id=="mol"?"":"none";
+ document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id==id));
+ if(id=="el")showEl(cur.z);else if(id=="mol")showMol(cur.i);else if(id=="ph")updLab();else if(id=="mass")runMass();else if(id=="bal")runBal();
+ else if(id=="sol"){runMol();runDil()}else if(id=="gas")runGas();else if(id=="tit")runTit(0);else if(id=="rx")runRx()}
+var filter=function(){const t=q.value.trim().toLowerCase(),c=cat.value;
+ E.forEach(e=>{const ok=!t||e.name.includes(t)||e.en.toLowerCase().startsWith(t)||e.sym.toLowerCase()==t||String(e.z)==t;btns[e.z].classList.toggle("dim",!(ok&&(!c||catOf(e.z)==c)))})};
+q.oninput=cat.onchange=filter;
+
+/* ===== البحث: عنصر / فئة / معادلات ===== */
+let smode="el";
+const SEGL={el:["عنصر","Element"],cat:["فئة","Category"],eq:["معادلات","Equations"]};
+const PH={el:["ابحث عن عنصر: الاسم أو الرمز أو الرقم","Search an element: name, symbol or number"],cat:["ابحث عن فئة، مثل: هالوجين","Search a category, e.g. halogen"],eq:["ابحث عن تفاعل، أو اكتب معادلتك: Fe + O2 -> Fe2O3","Search a reaction, or type yours: Fe + O2 -> Fe2O3"]};
+const EQS=[["تكوين الماء","Water formation","H2 + O2 -> H2O"],["التحليل الكهربي للماء","Electrolysis of water","H2O -> H2 + O2"],["احتراق الميثان","Methane combustion","CH4 + O2 -> CO2 + H2O"],["احتراق البروبان","Propane combustion","C3H8 + O2 -> CO2 + H2O"],["احتراق الجلوكوز","Glucose combustion","C6H12O6 + O2 -> CO2 + H2O"],["التمثيل الضوئي","Photosynthesis","CO2 + H2O -> C6H12O6 + O2"],["صدأ الحديد","Rusting of iron","Fe + O2 -> Fe2O3"],["احتراق المغنيسيوم","Magnesium burning","Mg + O2 -> MgO"],["تحلل بيروكسيد الهيدروجين","Hydrogen peroxide decomposition","H2O2 -> H2O + O2"],["تخليق الأمونيا (هابر)","Ammonia synthesis (Haber)","N2 + H2 -> NH3"],["تعادل HCl مع NaOH","HCl + NaOH neutralization","HCl + NaOH -> NaCl + H2O"],["تعادل H₂SO₄ مع NaOH","H2SO4 + NaOH neutralization","H2SO4 + NaOH -> Na2SO4 + H2O"],["الصوديوم مع الماء","Sodium with water","Na + H2O -> NaOH + H2"],["الزنك مع حمض HCl","Zinc with HCl","Zn + HCl -> ZnCl2 + H2"],["الألومنيوم مع حمض HCl","Aluminium with HCl","Al + HCl -> AlCl3 + H2"],["الجير مع حمض HCl","Limestone with HCl","CaCO3 + HCl -> CaCl2 + H2O + CO2"],["الخل مع بيكربونات الصوديوم","Vinegar with baking soda","NaHCO3 + CH3COOH -> CH3COONa + H2O + CO2"],["ترسيب كلوريد الفضة","Silver chloride precipitation","AgNO3 + NaCl -> AgCl + NaNO3"]];
+const subd=x=>x.replace(/(?<=[A-Za-z\)])\d+/g,m=>[...m].map(d=>"₀₁₂₃₄₅₆₇₈₉"[d]).join(""));
+function balStr(t){try{const[sp,y,nl]=balance(t),f=(a,b)=>sp.slice(a,b).map((x,i)=>(y[a+i]>1?y[a+i]:"")+x).join(" + ");return subd(f(0,nl)+" → "+f(nl,sp.length))}catch(e){return null}}
+function runSearch(){const en=lang=="en",t=q.value.trim(),tl=t.toLowerCase();let h="";
+ q.placeholder=PH[smode][en?1:0];
+ seg.querySelectorAll("button").forEach(b=>{b.textContent=SEGL[b.dataset.m][en?1:0];b.setAttribute("aria-pressed",b.dataset.m==smode)});
+ const none=`<div class="nores">${L("لا توجد نتائج","No results")}</div>`;
+ if(smode=="el"){
+  const r=E.filter(e=>!t||e.name.includes(t)||e.en.toLowerCase().includes(tl)||e.sym.toLowerCase()==tl||String(e.z)==t);
+  h=r.length?r.map(e=>`<button class="row tile" data-z="${e.z}" style="background:var(--${catOf(e.z)})"><span class="mu">${e.z}</span><b class="sy2">${e.sym}</b><span class="nm">${en?e.en:e.name}</span></button>`).join(""):none}
+ else if(smode=="cat"){
+  const r=Object.entries(CATS).filter(([k,v])=>!t||v[0].includes(t)||CATEN[k].toLowerCase().includes(tl));
+  h=r.length?`<table><thead><tr><th></th><th>${L("الفئة","Category")}</th><th>${L("العدد","Count")}</th><th>${L("العناصر","Elements")}</th></tr></thead><tbody>`+r.map(([k,v])=>`<tr><td><span class="sw" style="background:var(--${k})"></span></td><td>${en?CATEN[k]:v[0]}<br><span class="mu">${en?v[0]:CATEN[k]}</span></td><td>${v[1].length}</td><td>${v[1].map(z=>`<button class="sy" data-z="${z}">${E[z-1].sym}</button>`).join("")}</td></tr>`).join("")+"</tbody></table>":none}
+ else if(/->|→|=/.test(t)){
+  const bs=balStr(t);
+  h=bs?`<div class="eqrow"><div class="mu">${L("المعادلة بعد الموازنة","Balanced equation")}</div><div class="eqn">${bs}</div><button class="sy" data-open="1">${L("افتح في الموازن","Open in balancer")}</button></div>`:`<div class="nores">${L("تعذّرت الموازنة. اكتبها هكذا: Fe + O2 -> Fe2O3","Could not balance. Write it like: Fe + O2 -> Fe2O3")}</div>`}
+ else{
+  const r=EQS.map((x,i)=>[x,i]).filter(([x])=>!t||x[0].includes(t)||x[1].toLowerCase().includes(tl)||x[2].toLowerCase().includes(tl));
+  h=r.length?r.map(([x,i])=>`<div class="eqrow"><b>${en?x[1]:x[0]}</b><div class="eqn">${balStr(x[2])||subd(x[2])}</div><button class="sy" data-eq="${i}">${L("افتح في الموازن","Open in balancer")}</button></div>`).join(""):none}
+ sres.innerHTML=`<div class="list${smode=="el"?" g":""}">${h}</div>`;
+ sres.querySelectorAll("[data-z]").forEach(b=>b.onclick=()=>{showEl(+b.dataset.z);detail.scrollIntoView({behavior:"smooth",block:"start"})});
+ sres.querySelectorAll("[data-eq]").forEach(b=>b.onclick=()=>{eq.value=EQS[+b.dataset.eq][2];tab("bal")});
+ sres.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{eq.value=t;tab("bal")})}
+function renderCats(){runSearch()}
+seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{smode=b.dataset.m;q.value="";runSearch()});
+q.oninput=runSearch;
+
+/* ===== اصنع وجرّب ===== */
+const mkI=a=>Object.fromEntries(a.map(([k,s,q,ar,e,y,p])=>[k,{s,q,a:ar,e,y,p}]));
+const CI=mkI([["H","H",1,"هيدروجين","Hydrogen","H⁺"],["Na","Na",1,"صوديوم","Sodium","Na⁺"],["K","K",1,"بوتاسيوم","Potassium","K⁺"],["NH4","NH4",1,"أمونيوم","Ammonium","NH₄⁺",1],["Ag","Ag",1,"فضة","Silver","Ag⁺"],["Ca","Ca",2,"كالسيوم","Calcium","Ca²⁺"],["Mg","Mg",2,"مغنيسيوم","Magnesium","Mg²⁺"],["Ba","Ba",2,"باريوم","Barium","Ba²⁺"],["Zn","Zn",2,"زنك","Zinc","Zn²⁺"],["Fe2","Fe",2,"حديد II","Iron(II)","Fe²⁺"],["Fe3","Fe",3,"حديد III","Iron(III)","Fe³⁺"],["Cu","Cu",2,"نحاس II","Copper(II)","Cu²⁺"],["Pb","Pb",2,"رصاص II","Lead(II)","Pb²⁺"],["Al","Al",3,"ألومنيوم","Aluminium","Al³⁺"]]);
+const AI=mkI([["Cl","Cl",1,"كلوريد","chloride","Cl⁻"],["Br","Br",1,"بروميد","bromide","Br⁻"],["I","I",1,"يوديد","iodide","I⁻"],["NO3","NO3",1,"نترات","nitrate","NO₃⁻",1],["SO4","SO4",2,"كبريتات","sulfate","SO₄²⁻",1],["OH","OH",1,"هيدروكسيد","hydroxide","OH⁻",1],["CO3","CO3",2,"كربونات","carbonate","CO₃²⁻",1],["PO4","PO4",3,"فوسفات","phosphate","PO₄³⁻",1],["S","S",2,"كبريتيد","sulfide","S²⁻"],["Ac","CH3COO",1,"أسيتات","acetate","CH₃COO⁻",1]]);
+const MET={K:"K",Na:"Na",Ca:"Ca",Mg:"Mg",Al:"Al",Zn:"Zn",Fe:"Fe2",Pb:"Pb",Cu:"Cu",Ag:"Ag"},ACT=["K","Ba","Ca","Na","Mg","Al","Zn","Fe","Pb","H","Cu","Ag"];
+const gcd=(a,b)=>b?gcd(b,a%b):a,eqs=e=>balStr(e)||subd(e.replace("->","→"));
+function formula(c,a){const C=CI[c],A=AI[a],g=gcd(C.q,A.q),nc=A.q/g,na=C.q/g;
+ const cs=C.p&&nc>1?"("+C.s+")"+nc:C.s+(nc>1?nc:""),as=A.p&&na>1?"("+A.s+")"+na:A.s+(na>1?na:"");return a=="Ac"?as+cs:cs+as}
+const cname=(c,a,en)=>en?CI[c].e+" "+AI[a].e:AI[a].a+" ال"+CI[c].a;
+function soluble(c,a){if(["Na","K","NH4","H"].includes(c)||a=="NO3"||a=="Ac")return true;
+ if(["Cl","Br","I"].includes(a))return!["Ag","Pb"].includes(c);if(a=="SO4")return!["Ba","Pb","Ca"].includes(c);if(a=="OH")return["Ba","Ca"].includes(c);return false}
+function dbl(c1,a1,c2,a2){if(c1==c2||a1==a2)return{rx:0,why:L("المركبان يشتركان في أيون، فلا يوجد ما يتبادل مكانه.","The compounds share an ion, so nothing can swap partners.")};
+ const w=[],pr=[];let rx=0;
+ [[c1,a2],[c2,a1]].forEach(([c,a])=>{
+  if(c=="H"&&a=="OH"){rx=1;w.push(L("يتكوّن ماء (تعادل)","Water forms (neutralisation)"));pr.push("H2O")}
+  else if(c=="H"&&a=="CO3"){rx=1;w.push(L("يتصاعد غاز CO₂","CO₂ gas is released"));pr.push("H2O","CO2")}
+  else if(c=="H"&&a=="S"){rx=1;w.push(L("يتصاعد غاز H₂S","H₂S gas is released"));pr.push("H2S")}
+  else if(c=="NH4"&&a=="OH"){rx=1;w.push(L("يتصاعد غاز النشادر NH₃","NH₃ gas is released"));pr.push("NH3","H2O")}
+  else if(c=="H"&&a=="Ac"){rx=1;w.push(L("يتكوّن حمض الخليك الضعيف","Weak acetic acid forms"));pr.push("CH3COOH")}
+  else{const f=formula(c,a);if(!soluble(c,a)){rx=1;w.push(L("يترسّب ","Precipitate: ")+subd(f))}pr.push(f)}});
+ return rx?{rx:1,why:w.join(L("، ","; ")),eq:eqs(formula(c1,a1)+" + "+formula(c2,a2)+" -> "+pr.join(" + "))}:{rx:0,why:L("كل النواتج ذائبة ولا يتكوّن راسب أو غاز أو ماء، فتبقى الأيونات حرة في المحلول.","Every product is soluble; no precipitate, gas or water forms, so the ions just stay mixed.")}}
+function single(mk,c,a){const M=CI[MET[mk]],C=CI[c],iM=ACT.indexOf(M.s),iC=ACT.indexOf(C.s);
+ if(iC<0)return{rx:0,why:L("هذا الأيون خارج سلسلة النشاط الفلزي.","This ion is not in the metal activity series.")};
+ if(iM<iC){const h=["K","Na","Ca"].includes(M.s)?L(" (وسيتفاعل مع الماء أولًا بعنف)"," (it would also attack water violently first)"):"";
+  return{rx:1,why:L(`${M.a} أنشط من ${C.a} في سلسلة النشاط، فيزيحه من مركبه`,`${M.e} is more reactive than ${C.e}, so it displaces it`)+h,eq:eqs(mk+" + "+formula(c,a)+" -> "+formula(MET[mk],a)+" + "+(c=="H"?"H2":C.s))}}
+ return{rx:0,why:L(`${M.a} أقل نشاطًا من ${C.a} (أو مساوٍ له)، فلا يستطيع إزاحته.`,`${M.e} is less reactive than ${C.e} (or equal), so it cannot displace it.`)}}
+const rxs={c1:"Ag",a1:"NO3",c2:"Na",a2:"Cl"},RXP=[["Ag","NO3","Na","Cl"],["H","Cl","Na","OH"],["m:Zn","Cl","H","Cl"],["m:Cu","Cl","Zn","SO4"],["Na","Cl","K","NO3"],["Na","CO3","H","Cl"],["Cu","SO4","Na","OH"]];
+const pf=(c,a)=>c[0]=="m"?c.slice(2):formula(c,a);
+function fillCp(){const en=lang=="en",N=x=>en?x.e:x.a;
+ const cs=id=>`<select id="${id}"><optgroup label="${L("أيون موجب","Cation")}">`+Object.entries(CI).map(([k,x])=>`<option value="${k}">${N(x)} (${x.y})</option>`).join("")+`</optgroup><optgroup label="${L("فلز حر","Free metal")}">`+Object.keys(MET).map(k=>`<option value="m:${k}">${N(CI[MET[k]])} (${k})</option>`).join("")+"</optgroup></select>";
+ const an=id=>`<select id="${id}">`+Object.entries(AI).map(([k,x])=>`<option value="${k}">${N(x)} (${x.y})</option>`).join("")+"</select>";
+ const slot=i=>`<div class="box"><h3>${L("المركب ","Compound ")}${i}</h3><label>${L("الأيون الموجب أو الفلز","Cation or free metal")}</label>${cs("rc"+i)}<label>${L("الأيون السالب","Anion")}</label>${an("ra"+i)}<div class="eqn" id="rf${i}"></div><div class="hint" id="rn${i}"></div></div>`;
+ rxbody.innerHTML=`<p class="hint">${L("ركّب مركبين بنفسك من الأيونات أو اختر فلزًا حرًّا، وشاهد هل يحدث تفاعل. جرّب أمثلة جاهزة:","Build two compounds from ions or pick a free metal and see if they react. Try a preset:")}</p><div class="pre">${RXP.map(p=>`<button class="sy" data-p="${p.join(",")}">${subd(pf(p[0],p[1]))} + ${subd(pf(p[2],p[3]))}</button>`).join("")}</div><div class="g2">${slot(1)}${slot(2)}</div><div class="box" id="rxo"></div><p class="hint">${L("قواعد مبسّطة: جدول الذوبانية وسلسلة النشاط في الظروف العادية.","Simplified rules: solubility table and activity series at ordinary conditions.")}</p>`;
+ ["c1","a1","c2","a2"].forEach(k=>{const e=document.getElementById("r"+k);e.value=rxs[k];e.onchange=()=>{rxs[k]=e.value;runCp()}});
+ rxbody.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const v=b.dataset.p.split(",");["c1","a1","c2","a2"].forEach((k,i)=>{rxs[k]=v[i];document.getElementById("r"+k).value=v[i]});runCp()});
+ runCp()}
+function runCp(){const en=lang=="en",P=[1,2].map(i=>({c:rxs["c"+i],a:rxs["a"+i]})),mt=p=>p.c[0]=="m";let r;
+ P.forEach((p,i)=>{const m=mt(p),n=i+1;document.getElementById("ra"+n).disabled=m;document.getElementById("rf"+n).textContent=subd(pf(p.c,p.a));
+  document.getElementById("rn"+n).textContent=m?L("فلز حر","Free metal"):cname(p.c,p.a,en)});
+ if(mt(P[0])&&mt(P[1]))r={rx:0,why:L("فلزان حران لا يتفاعلان معًا.","Two free metals do not react.")};
+ else if(mt(P[0])||mt(P[1])){const m=mt(P[0])?P[0]:P[1],c=mt(P[0])?P[1]:P[0];r=single(m.c.slice(2),c.c,c.a)}
+ else r=dbl(P[0].c,P[0].a,P[1].c,P[1].a);
+ rxo.innerHTML=`<div class="rxv ${r.rx?"ok":"no"}">${r.rx?"✔ "+L("يحدث تفاعل","A reaction occurs"):"✖ "+L("لا يحدث تفاعل","No reaction")}</div><p>${r.why}</p>${r.eq?`<div class="eqn">${r.eq}</div>`:""}`}
+
+const ENEG={H:2.2,B:2,C:2.55,Si:1.9,N:3.04,P:2.19,As:2.18,O:3.44,S:2.58,Se:2.55,Te:2.1,F:3.98,Cl:3.16,Br:2.96,I:2.66},VAN={H:1,B:3,C:4,Si:4,N:3,P:3,As:3,O:2,S:2,Se:2,Te:2,F:1,Cl:1,Br:1,I:1},VOV={"P-O":5,"S-O":4,"S-F":6,"N-O":2,"Se-O":4,"Te-O":4,"As-O":3,"I-O":5};
+const MCH={Sc:3,Y:3,Ti:4,Zr:4,V:3,Cr:3,Fe:3,Ag:1,Au:3,Pt:4,Tl:1,Sn:2,Pb:2,Bi:3,Al:3,Ga:3,In:3},NOBM=["Au","Pt","Ir","Os","Rh","Ru","Pd"],DI=["H","N","O","F","Cl","Br","I"],ANC={F:1,Cl:1,Br:1,I:1,H:1,O:2,S:2,Se:2,N:3,P:3};
+function elRx(a,b){const ka=catOf(a.z),kb=catOf(b.z),isM=k=>!["non","hal","nob","met"].includes(k),no=w=>({rx:0,why:w}),rs=x=>DI.includes(x.sym)?x.sym+"2":x.sym;let f,t,cond;
+ if(a.z==b.z)return no(L("نفس العنصر: لا يوجد تفاعل بين عنصرين مختلفين (هو يتحد مع نفسه فقط ليكوّن جزيئًا مثل O₂).","Same element: it only bonds with itself to form a molecule such as O₂."));
+ if(ka=="nob"||kb=="nob"){const n=ka=="nob"?a:b,o=n==a?b:a;if(["Xe","Kr"].includes(n.sym)&&o.sym=="F"){f=n.sym+"F2";cond=L("بالتسخين أو التفريغ الكهربي","with heating or an electric discharge");t=L("مركب تساهمي","covalent")}else return no(L("الغازات النبيلة مستقرة (غلافها ممتلئ) فلا تتفاعل.","Noble gases have full shells, so they do not react."))}
+ else if(isM(ka)&&isM(kb))return no(L("فلزان: لا يتفاعلان كيميائيًا، وقد يكوّنان سبيكة فقط.","Two metals do not react chemically; at most they form an alloy."));
+ else if(isM(ka)||isM(kb)){const m=isM(ka)?a:b,x=m==a?b:a,k=catOf(m.z),an=ANC[x.sym];
+  if(!an)return no(L("الفلز مع هذا اللافلز/شبه الفلز لا يعطي مركبًا بسيطًا في الظروف العادية.","No simple compound forms in ordinary conditions."));
+  if(NOBM.includes(m.sym)&&!["F","Cl","Br","I"].includes(x.sym))return no(L(`${m.name} فلز نبيل لا يتحد مع ${x.name} عادةً.`,`${m.en} is a noble metal and does not combine with ${x.en} normally.`));
+  if(x.sym=="H"&&!["alk","ale"].includes(k))return no(L("الهيدروجين لا يكوّن هيدريدات أيونية إلا مع القلويات والقلوية الأرضية.","Ionic hydrides form only with alkali and alkaline-earth metals."));
+  if(x.sym=="N"&&!["Li","Mg","Ca","Sr","Ba","Al"].includes(m.sym))return no(L("النيتروجين خامل: لا يتفاعل إلا مع Li وMg وCa وبعض الفلزات بالتسخين.","Nitrogen is inert: only Li, Mg, Ca and a few metals react, on heating."));
+  const q=k=="alk"?1:k=="ale"?2:["lan","act"].includes(k)?3:MCH[m.sym]||2,g=gcd(q,an),nm=an/g,nx=q/g;f=m.sym+(nm>1?nm:"")+x.sym+(nx>1?nx:"");t=L("مركب أيوني","ionic");
+  cond=["alk","ale"].includes(k)?L("يتفاعل بسرعة وقد يكون عنيفًا","reacts quickly, sometimes violently"):L("يحتاج تسخينًا","needs heating")}
+ else{const A=a.sym,B=b.sym;if(!ENEG[A]||!ENEG[B])return no(L("لا تتوفر بيانات كافية لهذا الزوج.","Not enough data for this pair."));
+  if(["C-N","N-C","Cl-N","N-Cl","Br-N","N-Br","I-N","N-I","C-I","I-C"].includes(A+"-"+B))return no(L("هذا الزوج لا يكوّن مركبًا مستقرًا بالتفاعل المباشر.","This pair does not form a stable compound by direct reaction."));
+  const c=ENEG[A]<=ENEG[B]?A:B,an=c==A?B:A,vA=VOV[c+"-"+an]||VAN[c],vB=VAN[an],g=gcd(vA,vB),nc=vB/g,na=vA/g;
+  f=c=="H"&&["C","N"].includes(an)?an+(na>1?na:"")+"H"+(nc>1?nc:""):c+(nc>1?nc:"")+an+(na>1?na:"");t=L("مركب تساهمي","covalent");cond=L("يحتاج حرارة أو شرارة أو ضوء أو محفزًا","needs heat, a spark, light or a catalyst")}
+ return{rx:1,why:L(`يتكوّن ${subd(f)} (${t}) — ${cond}.`,`${subd(f)} forms (${t}) — ${cond}.`),eq:eqs(rs(a)+" + "+rs(b)+" -> "+f)}}
+let rxm="el";const rze={a:11,b:17};
+function fillEl(){const en=lang=="en",o=id=>`<select id="${id}">`+E.map(e=>`<option value="${e.z}">${e.sym} — ${en?e.en:e.name}</option>`).join("")+"</select>";
+ rxbody.innerHTML=`<p class="hint">${L("اختر عنصرين وشاهد هل يتفاعلان وما الناتج.","Pick two elements and see whether they react and what forms.")}</p><div class="g2"><div class="box"><h3>${L("العنصر الأول","First element")}</h3>${o("ea")}</div><div class="box"><h3>${L("العنصر الثاني","Second element")}</h3>${o("eb")}</div></div><div class="box" id="rxo"></div><p class="hint">${L("قواعد مبسّطة في الظروف المناسبة.","Simplified rules under suitable conditions.")}</p>`;
+ [["ea","a"],["eb","b"]].forEach(([id,k])=>{const e=document.getElementById(id);e.value=rze[k];e.onchange=()=>{rze[k]=+e.value;runEl()}});runEl()}
+function runEl(){const r=elRx(E[rze.a-1],E[rze.b-1]);rxo.innerHTML=`<div class="rxv ${r.rx?"ok":"no"}">${r.rx?"✔ "+L("يحدث تفاعل","A reaction occurs"):"✖ "+L("لا يحدث تفاعل","No reaction")}</div><p>${r.why}</p>${r.eq?`<div class="eqn">${r.eq}</div>`:""}`}
+function fillRx(){p_rx.innerHTML=`<div class="seg" id="rseg" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><button data-m="el">${L("عنصر + عنصر","Element + Element")}</button><button data-m="cp">${L("مركب + مركب","Compound + Compound")}</button></div><div id="rxbody"></div>`;
+ rseg.querySelectorAll("button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.m==rxm);b.onclick=()=>{rxm=b.dataset.m;fillRx()}});rxm=="el"?fillEl():fillCp()}
+const runRx=()=>rxm=="el"?runEl():runCp();
+
+/* ===== تسجيل الدخول (واجهة تجريبية محلية) ===== */
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let dmode="in",user=null;try{user=JSON.parse(LS.get("abo_user")||"null")}catch(e){}
+function authUI(){const en=lang=="en";
+ usr.textContent=user?(en?"Hello, ":"أهلًا، ")+user.name+" ("+user.p+")":"";
+ lgin.textContent=user?L("تسجيل الخروج","Sign out"):L("تسجيل الدخول","Sign in");
+ dt.textContent=L("تسجيل الدخول","Sign in");dp.textContent=L("اختر طريقة التسجيل","Choose how to sign in");
+ dn.placeholder=L("اسمك (اختياري)","Your name (optional)");
+ t_fb.textContent=L("المتابعة عبر فيسبوك","Continue with Facebook");t_gg.textContent=L("المتابعة عبر جوجل","Continue with Google");t_cr.textContent=L("المتابعة عبر كروم","Continue with Chrome");dx.textContent=L("إلغاء","Cancel");const up=dmode=="up";dt.textContent=up?L("إنشاء حساب","Create account"):L("تسجيل الدخول","Sign in");dm.style.display=dgo.style.display=up?"flex":"none";dm.style.display=up?"block":"none";dm.placeholder=L("البريد الإلكتروني","Email");dgo.textContent=L("إنشاء الحساب","Create account");sgn.textContent=L("إنشاء حساب","Sign up");sgn.style.display=user?"none":""}
+lgin.onclick=()=>{if(user){user=null;LS.del("abo_user");authUI()}else{dmode="in";authUI();dlg.showModal()}};
+dx.onclick=()=>dlg.close();sgn.onclick=()=>{dmode="up";authUI();dlg.showModal()};dgo.onclick=()=>{user={p:"Email",name:dn.value.trim()||dm.value.split("@")[0]||L("ضيف","Guest")};LS.set("abo_user",JSON.stringify(user));dlg.close();authUI()};
+dlg.querySelectorAll(".prov").forEach(b=>b.onclick=()=>{user={p:b.dataset.p,name:dn.value.trim()||L("ضيف","Guest")};LS.set("abo_user",JSON.stringify(user));dlg.close();authUI()});
+
+applyLang();loop();
+</script>
+</body>
+</html>
